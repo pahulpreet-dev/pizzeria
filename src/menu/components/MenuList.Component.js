@@ -1,8 +1,7 @@
 import React from "react";
 
 import Card from "../../shared/UIElements/Card";
-import MenuItem from "./MenuItem.Component";
-
+import MenuCategory from "./MenuCategory.Component";
 import "./MenuList.Component.css";
 
 const MenuList = (props) => {
@@ -18,7 +17,7 @@ const MenuList = (props) => {
   return (
     <ul className="category-list">
       {props.categories.map((category) => (
-        <MenuItem
+        <MenuCategory
           key={category.id}
           id={category.id}
           image={category.image}

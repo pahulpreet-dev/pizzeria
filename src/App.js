@@ -7,6 +7,7 @@ import {
 } from "react-router-dom";
 
 import Menu from "./menu/pages/Menu";
+import MenuItem from "./menu/components/MenuItem.Component";
 
 function App() {
   return (
@@ -14,6 +15,9 @@ function App() {
       <Switch>
         <Route path="/" exact>
           <Menu />
+        </Route>
+        <Route path="/:id/pizzas" exact>
+          <MenuItem />
         </Route>
       </Switch>
     </Router>
