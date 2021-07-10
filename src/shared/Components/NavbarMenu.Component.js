@@ -5,7 +5,7 @@ const NavbarMenu = () => {
   return (
     <Navbar collapseOnSelect expand="lg" bg="light" variant="light">
       <Navbar.Brand href="#home">
-        <img src={logo} height="90rem" width="90rem" />
+        <img src={logo} alt="logo" height="90rem" width="90rem" />
       </Navbar.Brand>
       <Navbar.Toggle aria-controls="responsive-navbar-nav" />
       <Navbar.Collapse id="responsive-navbar-nav">

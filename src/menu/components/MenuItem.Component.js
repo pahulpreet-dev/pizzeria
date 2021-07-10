@@ -1,10 +1,12 @@
 import React from "react";
 import { useParams } from "react-router-dom";
+import { useState } from "react";
 
 import NavbarMenu from "../../shared/Components/NavbarMenu.Component";
 import Avatar from "../../shared/UIElements/Avatar";
 
 import "./MenuItem.Component.css";
+import { Button, ButtonGroup, Modal } from "react-bootstrap";
 
 const MenuItem = () => {
   const DUMMY_PIZZAS = [
@@ -26,33 +28,45 @@ const MenuItem = () => {
       category: "c1",
     },
     {
-      id: "p2",
-      title: "The Uno",
+      id: "p3",
+      title: "The Uno 3",
       description: "1 Pizza with One Topping",
       imageUrl: "https://241pizza.com/media/ONE.png",
       price_small: 7.99,
       category: "c2",
     },
     {
-      id: "p2",
-      title: "The Uno",
+      id: "p4",
+      title: "The Uno 4",
       description: "1 Pizza with One Topping",
       imageUrl: "https://241pizza.com/media/ONE.png",
       price_small: 7.99,
       category: "c2",
     },
     {
-      id: "p2",
-      title: "The Uno",
+      id: "p5",
+      title: "The Uno 5",
       description: "1 Pizza with One Topping",
       imageUrl: "https://241pizza.com/media/ONE.png",
       price_small: 7.99,
       category: "c2",
     },
   ];
-  const orderButtonHandler = () => {};
   const { id } = useParams();
   const displayedPizzas = DUMMY_PIZZAS.filter((pizza) => pizza.category === id);
+  //Modal
+  const [show, setShow] = useState(false);
+  const [modalPizza, setModalPizza] = useState();
+  const [price, setPrice] = useState("0.00");
+  const [quantity, setQuantity] = useState(1);
+  const [validOrder, setValidOrder] = useState(false);
+  const [showError, setShowError] = useState(false);
+
+  const handleClose = () => setShow(false);
+  const handleShow = (pizzaId_) => {
+    setShow(true);
+    setModalPizza(displayedPizzas.filter((pizza) => pizza.id === pizzaId_));
+  };
   return (
     <div>
       <NavbarMenu></NavbarMenu>
@@ -65,7 +79,6 @@ const MenuItem = () => {
                   <div className="pizza-menu__info card-body">
                     <div className="pizza-menu__image">
                       <Avatar image={pizza.imageUrl} />
-                      <image src={pizza.imageUrl}></image>
                     </div>
                     <div className="list-unstyled">
                       <h2 className="card-title pricing-card-title">
@@ -76,7 +89,7 @@ const MenuItem = () => {
                   </div>
                   <button
                     type="button"
-                    onClick={orderButtonHandler()}
+                    onClick={() => handleShow(pizza.id)}
                     className="card-button mb-4 btn btn-lg btn-outline-danger"
                   >
                     Order
@@ -87,42 +100,96 @@ const MenuItem = () => {
           ))}
         </div>
       </div>
-      <div
-        class="modal fade"
-        id="exampleModal"
-        tabindex="-1"
-        aria-labelledby="exampleModalLabel"
-        aria-hidden="true"
-      >
-        <div className="modal-dialog">
-          <div className="modal-content">
-            <div className="modal-header">
-              <h5 className="modal-title">Modal title</h5>
-              <button
-                type="button"
-                className="btn-close"
-                data-bs-dismiss="modal"
-                aria-label="Close"
-              ></button>
+      <Modal centered show={show} onHide={handleClose}>
+        <Modal.Header closeButton>
+          <Modal.Title>{modalPizza && modalPizza[0].title}</Modal.Title>
+        </Modal.Header>
+        <Modal.Body className="d-flex justify-content-center">
+          <div className="container">
+            <div className="row">
+              <ButtonGroup size="lg" className="m-2 btn-block">
+                <Button
+                  variant="outline-primary"
+                  className="m-2 btn-block"
+                  onClick={() => {
+                    setPrice("9.99");
+                    setValidOrder(true);
+                  }}
+                >
+                  Small
+                </Button>
+                <Button
+                  variant="outline-primary"
+                  className="m-2 btn-block"
+                  onClick={() => {
+                    setPrice("11.99");
+                    setValidOrder(true);
+                  }}
+                >
+                  Medium
+                </Button>
+                <Button
+                  variant="outline-primary"
+                  className="m-2 btn-block"
+                  onClick={() => {
+                    setPrice("13.99");
+                    setValidOrder(true);
+                  }}
+                >
+                  Large
+                </Button>
+              </ButtonGroup>
             </div>
-            <div className="modal-body">
-              <p>Modal body text goes here.</p>
+            <div className="row d-flex justify-content-center mt-4">
+              Select quantity:
             </div>
-            <div className="modal-footer">
-              <button
-                type="button"
-                className="btn btn-secondary"
-                data-bs-dismiss="modal"
+            <div className="row d-flex justify-content-center">
+              <Button
+                variant="outline-danger"
+                className="m-1"
+                onClick={() => {
+                  quantity < 2 ? setQuantity(1) : setQuantity(quantity - 1);
+                  setPrice(price * quantity);
+                }}
               >
-                Close
-              </button>
-              <button type="button" className="btn btn-primary">
-                Save changes
-              </button>
+                <i class="fas fa-minus"></i>
+              </Button>
+              <h5 className="mt-2 mr-2 ml-2">{quantity}</h5>
+              <Button
+                variant="outline-success"
+                className="m-1"
+                onClick={() => {
+                  setQuantity(quantity + 1);
+                  setPrice(price * quantity);
+                }}
+              >
+                <i class="fas fa-plus"></i>
+              </Button>
             </div>
           </div>
-        </div>
-      </div>
+        </Modal.Body>
+        <Modal.Footer className="modal-footer">
+          <div className="container">
+            <div className="row d-flex flex-row-reverse">
+              <Button
+                onClick={() => {
+                  validOrder ? setShowError(false) : setShowError(true);
+                }}
+              >
+                Add to Order
+              </Button>
+              <h5 className="mt-2 mr-2">${price}</h5>
+            </div>
+            <div className="row d-flex flex-row-reverse">
+              {showError && (
+                <span className="invalid-feedback d-block d-flex flex-row-reverse">
+                  Select size
+                </span>
+              )}
+            </div>
+          </div>
+        </Modal.Footer>
+      </Modal>
     </div>
   );
 };
