@@ -57,10 +57,13 @@ const MenuItem = () => {
   //Modal
   const [show, setShow] = useState(false);
   const [modalPizza, setModalPizza] = useState();
-  const [price, setPrice] = useState("0.00");
+  const [price, setPrice] = useState(0.0);
+  const [disableQuantityButton, setDisableQuantityButton] = useState(true);
   const [quantity, setQuantity] = useState(1);
   const [validOrder, setValidOrder] = useState(false);
   const [showError, setShowError] = useState(false);
+  const [cartPrice, setCartPrice] = useState(0.0);
+  const [pizzaSize, setPizzaSize] = useState();
 
   const handleClose = () => setShow(false);
   const handleShow = (pizzaId_) => {
@@ -112,8 +115,13 @@ const MenuItem = () => {
                   variant="outline-primary"
                   className="m-2 btn-block"
                   onClick={() => {
-                    setPrice("9.99");
+                    setCartPrice(9.99);
+                    setPrice(9.99);
+                    setQuantity(1);
                     setValidOrder(true);
+                    setShowError(false);
+                    setDisableQuantityButton(false);
+                    setPizzaSize("sm");
                   }}
                 >
                   Small
@@ -122,8 +130,13 @@ const MenuItem = () => {
                   variant="outline-primary"
                   className="m-2 btn-block"
                   onClick={() => {
-                    setPrice("11.99");
+                    setCartPrice(11.99);
+                    setPrice(11.99);
+                    setQuantity(1);
                     setValidOrder(true);
+                    setShowError(false);
+                    setDisableQuantityButton(false);
+                    setPizzaSize("md");
                   }}
                 >
                   Medium
@@ -132,8 +145,13 @@ const MenuItem = () => {
                   variant="outline-primary"
                   className="m-2 btn-block"
                   onClick={() => {
-                    setPrice("13.99");
+                    setCartPrice(13.99);
+                    setPrice(13.99);
+                    setQuantity(1);
                     setValidOrder(true);
+                    setShowError(false);
+                    setDisableQuantityButton(false);
+                    setPizzaSize("lg");
                   }}
                 >
                   Large
@@ -145,22 +163,26 @@ const MenuItem = () => {
             </div>
             <div className="row d-flex justify-content-center">
               <Button
+                disabled={disableQuantityButton}
                 variant="outline-danger"
                 className="m-1"
                 onClick={() => {
                   quantity < 2 ? setQuantity(1) : setQuantity(quantity - 1);
-                  setPrice(price * quantity);
+                  quantity < 2
+                    ? setCartPrice(price)
+                    : setCartPrice(cartPrice - price);
                 }}
               >
                 <i class="fas fa-minus"></i>
               </Button>
               <h5 className="mt-2 mr-2 ml-2">{quantity}</h5>
               <Button
+                disabled={disableQuantityButton}
                 variant="outline-success"
                 className="m-1"
                 onClick={() => {
                   setQuantity(quantity + 1);
-                  setPrice(price * quantity);
+                  setCartPrice(cartPrice + price);
                 }}
               >
                 <i class="fas fa-plus"></i>
@@ -174,11 +196,14 @@ const MenuItem = () => {
               <Button
                 onClick={() => {
                   validOrder ? setShowError(false) : setShowError(true);
+                  validOrder &&
+                    console.log(` Cart details: \n Pizza Size: ${pizzaSize}\n Price: ${price}
+                  \n Quantity: ${quantity} \n Total: ${cartPrice.toFixed(2)}`);
                 }}
               >
                 Add to Order
               </Button>
-              <h5 className="mt-2 mr-2">${price}</h5>
+              <h5 className="mt-2 mr-2">${cartPrice.toFixed(2)}</h5>
             </div>
             <div className="row d-flex flex-row-reverse">
               {showError && (
