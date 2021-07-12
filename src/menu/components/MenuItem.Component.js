@@ -64,6 +64,7 @@ const MenuItem = () => {
   const [showError, setShowError] = useState(false);
   const [cartPrice, setCartPrice] = useState(0.0);
   const [pizzaSize, setPizzaSize] = useState();
+  const [checked, setChecked] = useState(false);
 
   const handleClose = () => setShow(false);
   const handleShow = (pizzaId_) => {
@@ -114,6 +115,7 @@ const MenuItem = () => {
                 <Button
                   variant="outline-primary"
                   className="m-2 btn-block"
+                  active={pizzaSize === "sm"}
                   onClick={() => {
                     setCartPrice(9.99);
                     setPrice(9.99);
@@ -129,6 +131,7 @@ const MenuItem = () => {
                 <Button
                   variant="outline-primary"
                   className="m-2 btn-block"
+                  active={pizzaSize === "md"}
                   onClick={() => {
                     setCartPrice(11.99);
                     setPrice(11.99);
@@ -144,6 +147,7 @@ const MenuItem = () => {
                 <Button
                   variant="outline-primary"
                   className="m-2 btn-block"
+                  active={pizzaSize === "lg"}
                   onClick={() => {
                     setCartPrice(13.99);
                     setPrice(13.99);
