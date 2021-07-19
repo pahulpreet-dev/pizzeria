@@ -3,7 +3,6 @@ import { useEffect, useState } from "react";
 import { cartModel } from "../model/cart.model";
 
 import "./cart.component.css";
-import { Card } from "react-bootstrap";
 import { Modal } from "react-bootstrap";
 
 const Cart = (props) => {

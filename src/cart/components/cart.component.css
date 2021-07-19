@@ -59,19 +59,11 @@
   text-align: start;
   margin: 0%;
 }
-.close {
-  position: absolute;
-  top: 5%;
-  right: 5%;
-  display: none;
-}
-.cart_card:hover .close {
-  display: inline;
-}
+
 .cart_card .fa-trash {
   display: inline-flex;
   position: fixed;
-  right: 10%;
+  right: 5%;
   outline: 0;
   border: 0ch;
   background-color: transparent;
@@ -89,9 +81,7 @@
 .fa-times:hover {
   color: rgb(231, 43, 43);
 }
-.cart_card:hover .fa-trash {
-  display: inline;
-}
+
 .divider {
   position: relative;
   margin-top: 10px;

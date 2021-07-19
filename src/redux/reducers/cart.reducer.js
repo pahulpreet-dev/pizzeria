@@ -1,6 +1,6 @@
 import { ADD_TO_ORDER, GET_CART } from "../actions/actionTypes";
 
-const initialState = JSON.parse(localStorage.getItem("cartOrder"));
+const initialState = JSON.parse(localStorage.getItem("cart"));
 
 export const CartReducer = (state = initialState, action) => {
   switch (action.type) {
