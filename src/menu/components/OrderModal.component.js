@@ -1,6 +1,9 @@
 import React from "react";
 import { Button, ButtonGroup, Modal } from "react-bootstrap";
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { connect } from "react-redux";
+import { cartAction } from "../../redux/actions/cart.action";
+import { cartModel } from "../../cart/model/cart.model";
 
 const OrderModal = (props) => {
   //states
@@ -11,6 +14,7 @@ const OrderModal = (props) => {
   const [showError, setShowError] = useState(false);
   const [cartPrice, setCartPrice] = useState(0.0);
   const [pizzaSize, setPizzaSize] = useState();
+  const [order, setOrder] = useState({});
 
   const handleClose = () => {
     setPrice(0.0);
@@ -23,6 +27,38 @@ const OrderModal = (props) => {
     props.handleClose();
   };
 
+  useEffect(() => {
+    let cartFromLocalStorage =
+      JSON.parse(localStorage.getItem("cart")) || cartModel;
+
+    setOrder(order);
+
+    if (validOrder) {
+      cartFromLocalStorage = {
+        ...cartFromLocalStorage,
+        itemName: [order.itemName, ...cartFromLocalStorage.itemName],
+        itemPrice: [order.itemPrice, ...cartFromLocalStorage.itemPrice],
+        itemQuantity: [
+          order.itemQuantity,
+          ...cartFromLocalStorage.itemQuantity,
+        ],
+        itemSize: [order.itemSize, ...cartFromLocalStorage.itemSize],
+        totalPrice: [order.totalPrice, ...cartFromLocalStorage.totalPrice],
+      };
+      localStorage.setItem("cart", JSON.stringify(cartFromLocalStorage));
+      console.log(JSON.parse(localStorage.getItem("cart")));
+    }
+    handleClose();
+  }, [order]);
+  const handleAddOrderButton = () => {
+    setOrder({
+      itemName: props.modalPizza && props.modalPizza[0].title,
+      itemPrice: price,
+      itemSize: pizzaSize,
+      itemQuantity: quantity,
+      totalPrice: cartPrice.toFixed(2),
+    });
+  };
   if (!props.show) {
     return null;
   }
@@ -42,7 +78,7 @@ const OrderModal = (props) => {
                 <Button
                   variant="outline-primary"
                   className="m-2 btn-block"
-                  active={pizzaSize === "sm"}
+                  active={pizzaSize === "Small"}
                   onClick={() => {
                     setCartPrice(9.99);
                     setPrice(9.99);
@@ -50,7 +86,7 @@ const OrderModal = (props) => {
                     setValidOrder(true);
                     setShowError(false);
                     setDisableQuantityButton(false);
-                    setPizzaSize("sm");
+                    setPizzaSize("Small");
                   }}
                 >
                   Small
@@ -58,7 +94,7 @@ const OrderModal = (props) => {
                 <Button
                   variant="outline-primary"
                   className="m-2 btn-block"
-                  active={pizzaSize === "md"}
+                  active={pizzaSize === "Medium"}
                   onClick={() => {
                     setCartPrice(11.99);
                     setPrice(11.99);
@@ -66,7 +102,7 @@ const OrderModal = (props) => {
                     setValidOrder(true);
                     setShowError(false);
                     setDisableQuantityButton(false);
-                    setPizzaSize("md");
+                    setPizzaSize("Medium");
                   }}
                 >
                   Medium
@@ -74,7 +110,7 @@ const OrderModal = (props) => {
                 <Button
                   variant="outline-primary"
                   className="m-2 btn-block"
-                  active={pizzaSize === "lg"}
+                  active={pizzaSize === "Large"}
                   onClick={() => {
                     setCartPrice(13.99);
                     setPrice(13.99);
@@ -82,7 +118,7 @@ const OrderModal = (props) => {
                     setValidOrder(true);
                     setShowError(false);
                     setDisableQuantityButton(false);
-                    setPizzaSize("lg");
+                    setPizzaSize("Large");
                   }}
                 >
                   Large
@@ -106,7 +142,9 @@ const OrderModal = (props) => {
               >
                 <i className="fas fa-minus"></i>
               </Button>
-              <h5 className="mt-2 mr-2 ml-2">{quantity}</h5>
+              <h5 id="quantity" className="mt-2 mr-2 ml-2">
+                {quantity}
+              </h5>
               <Button
                 disabled={disableQuantityButton}
                 variant="outline-success"
@@ -126,10 +164,7 @@ const OrderModal = (props) => {
             <div className="row d-flex flex-row-reverse">
               <Button
                 onClick={() => {
-                  validOrder ? setShowError(false) : setShowError(true);
-                  validOrder &&
-                    console.log(` Cart details: \n Pizza Size: ${pizzaSize}\n Price: ${price}
-                  \n Quantity: ${quantity} \n Total: ${cartPrice.toFixed(2)}`);
+                  validOrder ? handleAddOrderButton() : setShowError(true);
                 }}
               >
                 Add to Order
@@ -149,5 +184,8 @@ const OrderModal = (props) => {
     </div>
   );
 };
+const mapStateToProps = (state) => ({
+  cartReducer: state.CartReducer,
+});
 
-export default OrderModal;
+export default connect(mapStateToProps, { cartAction })(OrderModal);

@@ -1,0 +1,147 @@
+@keyframes modalFade {
+  from {
+    transform: translateX(200%);
+
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+.cart-modal {
+  width: 40vw !important;
+  min-width: 450px !important;
+  position: fixed !important;
+  top: 0px !important;
+  right: 0px !important;
+  margin: 0px !important;
+  animation-name: modalFade;
+  animation-duration: 0.3s;
+}
+.cart-modal .modal-content {
+  height: 100vh !important;
+}
+
+.cart_container {
+  width: 100%;
+  min-width: 450px;
+  text-align: center;
+  margin: auto;
+}
+.cart_title {
+  font-weight: 500;
+  text-align: start;
+}
+.empty_cart {
+  text-align: center !important;
+  margin-top: 40px;
+  font-size: x-large;
+}
+.cart_card:hover {
+  background-color: #ff9800;
+}
+.cart_card {
+  padding-left: 25px;
+  padding-top: 15px;
+  padding-bottom: 10px;
+  padding-right: 10px;
+}
+.modal-body_cart {
+  margin-top: 2 !important;
+  padding: 0 !important;
+}
+.cart_desc {
+  font-weight: 500;
+}
+.cart_card p {
+  text-align: start;
+  margin: 0%;
+}
+.close {
+  position: absolute;
+  top: 5%;
+  right: 5%;
+  display: none;
+}
+.cart_card:hover .close {
+  display: inline;
+}
+.cart_card .fa-trash {
+  display: inline-flex;
+  position: fixed;
+  right: 10%;
+  outline: 0;
+  border: 0ch;
+  background-color: transparent;
+}
+.fa-trash:hover {
+  color: rgb(231, 43, 43);
+}
+.fa-times {
+  outline: 0;
+  border: 0;
+  background-color: transparent;
+  position: relative;
+  top: 30%;
+}
+.fa-times:hover {
+  color: rgb(231, 43, 43);
+}
+.cart_card:hover .fa-trash {
+  display: inline;
+}
+.divider {
+  position: relative;
+  margin-top: 10px;
+  margin-bottom: 10px;
+  height: 1px;
+}
+
+.div-transparent:before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 5%;
+  right: 5%;
+  width: 90%;
+  height: 1px;
+  background-image: linear-gradient(
+    to right,
+    transparent,
+    rgb(48, 49, 51),
+    transparent
+  );
+}
+.div-dot:after {
+  content: "";
+  position: absolute;
+  z-index: 1;
+  top: -9px;
+  left: calc(50% - 9px);
+  width: 18px;
+  height: 18px;
+  background-color: #ff9800;
+  border: 1px solid rgb(48, 49, 51);
+  border-radius: 50%;
+  box-shadow: inset 0 0 0 2px white, 0 0 0 4px white;
+}
+.cart_card:hover .div-dot:after {
+  box-shadow: inset 0 0 0 2px white;
+}
+/* For Mobile */
+@media screen and (max-width: 600px) {
+  .cart_container {
+    min-width: 300px;
+    width: 100%;
+  }
+  .cart-modal .modal-content {
+    height: 100vh !important;
+    width: 100vw !important;
+    position: fixed !important;
+    top: 0px !important;
+    right: 0px !important;
+    margin: 0px !important;
+  }
+}

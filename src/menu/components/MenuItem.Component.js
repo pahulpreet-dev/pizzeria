@@ -1,5 +1,5 @@
 import React from "react";
-import { useParams } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import { useState } from "react";
 
 import NavbarMenu from "../../shared/Components/NavbarMenu.Component";
@@ -101,7 +101,7 @@ const MenuItem = () => {
         modalPizza={modalPizza}
         handleClose={handleClose}
       />
-      ;
+      <Link to="/viewcart"></Link>
     </div>
   );
 };
