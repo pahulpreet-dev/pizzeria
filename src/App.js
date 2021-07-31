@@ -7,6 +7,8 @@ import MenuItem from "./menu/components/MenuItem.Component";
 import store from "./redux/store.redux";
 import Cart from "./cart/components/cart.component";
 import { cartModel } from "./cart/model/cart.model";
+import Login from "./authorization/login.component";
+import Signup from "./authorization/signup.component";
 
 function App() {
   localStorage.setItem("cart", JSON.stringify(cartModel));
@@ -22,6 +24,12 @@ function App() {
           </Route>
           <Route path="/viewcart" exact>
             <Cart />
+          </Route>
+          <Route path="/login" exact>
+            <Login></Login>
+          </Route>
+          <Route path="/signup" exact>
+            <Signup />
           </Route>
         </Switch>
       </Router>

@@ -40,7 +40,14 @@ const NavbarMenu = () => {
             </NavDropdown>
           </Nav>
           <Nav>
-            <Nav.Link to="/">More deets</Nav.Link>
+            <Nav.Link>
+              <Link
+                style={{ textDecoration: "none", color: "rgba(0, 0, 0, 0.5)" }}
+                to="/login"
+              >
+                Login
+              </Link>
+            </Nav.Link>
             <Nav.Link
               eventKey={2}
               to="#cart"
