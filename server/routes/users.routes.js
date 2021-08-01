@@ -15,6 +15,12 @@ router.get("/", controller.AllUsers);
 */
 router.post("/", controller.RegisterUser);
 
+/* @desc delete a user
+@route /api/users/:userId 
+@type delete
+*/
+router.delete("/:userId", controller.DeleteUser);
+
 router.get("/test", (req, res) => res.json({ msg: "chal user bar" }));
 
 module.exports = router;

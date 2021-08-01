@@ -39,6 +39,7 @@ module.exports.RegisterUser = (req, res) => {
   });
 };
 
+//@desc get list of all users
 module.exports.AllUsers = (req, res) => {
   UserModel.find()
     .then((users) => {
@@ -50,5 +51,17 @@ module.exports.AllUsers = (req, res) => {
     })
     .catch((error) => {
       console.log("error all users", error);
+    });
+};
+
+//@desc delete a user
+module.exports.DeleteUser = (req, res) => {
+  UserModel.remove({ _id: req.params.userId })
+    .exec()
+    .then((response) => {
+      res.status(200).json({ message: "User Deleted" });
+    })
+    .catch((error) => {
+      console.log(error);
     });
 };
