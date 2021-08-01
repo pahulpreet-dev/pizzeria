@@ -11,7 +11,8 @@ import Login from "./authorization/login.component";
 import Signup from "./authorization/signup.component";
 
 function App() {
-  localStorage.setItem("cart", JSON.stringify(cartModel));
+  !localStorage.getItem("cart") &&
+    localStorage.setItem("cart", JSON.stringify(cartModel));
   return (
     <Provider store={store}>
       <Router>
