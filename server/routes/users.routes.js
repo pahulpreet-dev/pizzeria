@@ -10,10 +10,16 @@ const controller = require("../controllers/users.controllers");
 router.get("/", controller.AllUsers);
 
 /* @desc registers new user
-@route /api/users/ 
+@route /api/users/signup
 @type post
 */
-router.post("/", controller.RegisterUser);
+router.post("/signup", controller.RegisterUser);
+
+/* @desc login a user
+@route /api/users/login
+@type post
+*/
+router.post("/login", controller.LoginUser);
 
 /* @desc delete a user
 @route /api/users/:userId 

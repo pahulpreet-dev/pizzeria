@@ -1,5 +1,7 @@
 const mongoose = require("mongoose");
 const bcrypt = require("bcrypt");
+const jwt = require("jsonwebtoken");
+const db = require("../keys");
 
 const validateRegisterInput = require("../validations/register.validate");
 //refrence to mongoose schema
@@ -39,6 +41,60 @@ module.exports.RegisterUser = (req, res) => {
   });
 };
 
+//@desc login a user
+module.exports.LoginUser = (req, res) => {
+  UserModel.findOne({ email: req.body.email })
+    .then((user) => {
+      if (!user) {
+        return res
+          .status(401)
+          .json({ message: "Email or Password is incorrect" });
+      } else {
+        bcrypt.compare(req.body.password, user.password, (err, result) => {
+          if (err)
+            return res
+              .status(401)
+              .json({ message: "Email or Password is incorrect" });
+          else if (result) {
+            const payload = {
+              id: user._id,
+              name: user.name,
+              address: user.address,
+              email: user.email,
+            }; //jwt payload
+            //jwt signin token
+            jwt.sign(
+              payload,
+              db.secret,
+              {
+                expiresIn: 604800, //1week
+              },
+              (error, token) => {
+                if (error) {
+                  console.log(error);
+                  return res.status(500).json(error);
+                }
+                return res.status(200).json({
+                  success: true,
+                  message: "Authentic",
+                  token: `Bearer ${token}`,
+                });
+              }
+            );
+            // return res.status(200).json({ message: "Authentic" });
+          } else
+            return res
+              .status(401)
+              .json({ message: "Email or Password is incorrect" });
+        });
+      }
+    })
+    .catch((error) => {
+      console.log(error);
+      res.status(500).json(error);
+    });
+};
+
 //@desc get list of all users
 module.exports.AllUsers = (req, res) => {
   UserModel.find()
@@ -51,6 +107,7 @@ module.exports.AllUsers = (req, res) => {
     })
     .catch((error) => {
       console.log("error all users", error);
+      res.status(500).json(error);
     });
 };
 
@@ -63,5 +120,6 @@ module.exports.DeleteUser = (req, res) => {
     })
     .catch((error) => {
       console.log(error);
+      res.status(500).json(error);
     });
 };
