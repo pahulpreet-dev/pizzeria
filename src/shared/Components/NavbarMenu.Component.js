@@ -2,14 +2,32 @@ import { Navbar, Nav, NavDropdown } from "react-bootstrap";
 import { Link } from "react-router-dom";
 import logo from "./PZ.png";
 import { useState } from "react";
+import { connect } from "react-redux";
 import Cart from "../../cart/components/cart.component";
+import { logoutUser } from "../../redux/actions/auth.action";
+import { useEffect } from "react";
+import jwtDecode from "jwt-decode";
 
-const NavbarMenu = () => {
+const NavbarMenu = (props) => {
   const [showCartModal, setShowCartModal] = useState(false);
+  const [isAuthentic, setIsAuthentic] = useState(props.auth.isAuthentic);
+  const [userName, setUsername] = useState("");
+
   const handleCloseCart = () => setShowCartModal(false);
   const handleShowCart = (e) => {
     e.preventDefault();
     setShowCartModal(true);
+  };
+  useEffect(() => {
+    const token = localStorage.getItem("jwtToken");
+    if (token) {
+      const decodedUser = jwtDecode(token);
+      setUsername(decodedUser.name);
+    }
+  }, [userName]); //component did mount
+  const logoutButtonHandler = () => {
+    setIsAuthentic(false);
+    props.logoutUser();
   };
   return (
     <>
@@ -40,14 +58,24 @@ const NavbarMenu = () => {
             </NavDropdown>
           </Nav>
           <Nav>
-            <Nav.Link>
-              <Link
-                style={{ textDecoration: "none", color: "rgba(0, 0, 0, 0.5)" }}
-                to="/login"
-              >
-                Login
-              </Link>
-            </Nav.Link>
+            {isAuthentic && (
+              <Nav.Link onClick={() => logoutButtonHandler()}>
+                Welcome, {userName}
+              </Nav.Link>
+            )}
+            {!isAuthentic && (
+              <Nav.Link>
+                <Link
+                  style={{
+                    textDecoration: "none",
+                    color: "rgba(0, 0, 0, 0.5)",
+                  }}
+                  to="/login"
+                >
+                  Login
+                </Link>
+              </Nav.Link>
+            )}
             <Nav.Link
               eventKey={2}
               to="#cart"
@@ -69,4 +97,8 @@ const NavbarMenu = () => {
   );
 };
 
-export default NavbarMenu;
+const mapStateToProps = (state) => ({
+  auth: state.AuthReducer,
+});
+
+export default connect(mapStateToProps, { logoutUser })(NavbarMenu);

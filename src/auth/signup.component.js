@@ -20,11 +20,9 @@ const Signup = () => {
       email: document.getElementById("email").value,
       password: document.getElementById("password").value,
     };
-    console.log("signup", user);
     axios
       .post("http://localhost:5000/api/users/signup", user)
       .then((result) => {
-        console.log("Signup", result);
         setLoading(false);
         setShowToast(true);
         setToastMessage(result.data.message);
@@ -53,7 +51,7 @@ const Signup = () => {
                 name="name"
                 id="name"
                 placeholder="Name"
-                autoComplete="off"
+                autoComplete="new-password"
               />
               <span className="focus-input100"></span>
               <span className="symbol-input100">
@@ -67,7 +65,7 @@ const Signup = () => {
                 name="address"
                 id="address"
                 placeholder="Address"
-                autoComplete="off"
+                autoComplete="new-password"
               />
               <span className="focus-input100"></span>
               <span className="symbol-input100">
@@ -81,7 +79,7 @@ const Signup = () => {
                 name="email"
                 id="email"
                 placeholder="Email"
-                autoComplete="off"
+                autoComplete="new-password"
               />
               <span className="focus-input100"></span>
               <span className="symbol-input100">
