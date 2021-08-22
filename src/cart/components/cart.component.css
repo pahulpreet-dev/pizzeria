@@ -168,7 +168,7 @@
     width: 100%;
   }
   .cart-modal .modal-content {
-    height: 100vh !important;
+    height: 90vh !important;
     width: 100vw !important;
     position: fixed !important;
     top: 0px !important;
