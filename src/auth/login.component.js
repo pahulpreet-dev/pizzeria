@@ -1,21 +1,31 @@
-import React, { useState } from "react";
-import { Spinner, Toast } from "react-bootstrap";
-import { Link, useHistory } from "react-router-dom";
+import React, { useEffect, useState } from "react";
+import { Spinner } from "react-bootstrap";
+import { Link, useHistory, useLocation } from "react-router-dom";
 import axios from "axios";
 import { connect } from "react-redux";
-import { loginUser } from "../redux/actions/auth.action";
+import { useRef } from "react";
+import jwtDecode from "jwt-decode";
 
+import { loginUser } from "../redux/actions/auth.action";
+import Notification from "../shared/Components/notifications.component";
 import logo from "../shared/Components/PZ.png";
 import "./login.component.css";
-import { useRef } from "react";
 
 const Login = (props) => {
+  const location = useLocation();
+  const { _toastMessage } = (location && location.state) || "";
   const [loading, setLoading] = useState(false);
-  const [showToast, setShowToast] = useState(false);
-  const [toastMessage, setToastMessage] = useState("");
+  const [showToast, setShowToast] = useState(location && location.state);
+  const [toastMessage, setToastMessage] = useState(_toastMessage);
   const emailValue = useRef();
   const passwordValue = useRef();
   const history = useHistory();
+
+  useEffect(() => {
+    if (localStorage.getItem("jwtToken")) {
+      history.push({ pathname: "/", state: { _toastMessage: toastMessage } });
+    }
+  }, [toastMessage]);
 
   const loginButtonHandler = (e) => {
     e.preventDefault();
@@ -28,17 +38,22 @@ const Login = (props) => {
       .then((result) => {
         setLoading(false);
         setShowToast(true);
-        setToastMessage(result.data.message);
         //get token from result
         const { token } = result.data;
         //set data to local storage
         localStorage.setItem("jwtToken", token);
         props.loginUser(result.data);
-        history.push("/");
+
+        const decodedUser = jwtDecode(token);
+        setToastMessage(`Welcome, ${decodedUser.name}`);
       })
       .catch((error) => {
         console.log("error login", error);
       });
+  };
+
+  const closeNotification = () => {
+    setShowToast(false);
   };
 
   return (
@@ -101,22 +116,16 @@ const Login = (props) => {
                 style={{ textDecoration: "none" }}
               >
                 <button className="login100-form-btn">Signup</button>
-                {showToast && (
-                  <div className="notification-toast m-4">
-                    <Toast
-                      bg="Warning"
-                      className="notification-toast m-4"
-                      onClose={() => setShowToast(false)}
-                      show={showToast}
-                      autohide
-                    >
-                      <Toast.Body>
-                        <strong>{toastMessage}</strong>
-                      </Toast.Body>
-                    </Toast>
-                  </div>
-                )}
               </Link>
+              {showToast && (
+                <div className="notification-toast m-4">
+                  <Notification
+                    show={showToast}
+                    closeNotification={closeNotification}
+                    toastMessage={toastMessage}
+                  />
+                </div>
+              )}
             </div>
           </div>
         </div>

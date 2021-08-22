@@ -1,9 +1,18 @@
-import React from "react";
-
+import React, { useState } from "react";
+import { useLocation } from "react-router-dom";
 import MenuList from "../components/MenuList.Component";
 import NavbarMenu from "../../shared/Components/NavbarMenu.Component";
+import Notification from "../../shared/Components/notifications.component";
 
 const Menu = () => {
+  const location = useLocation();
+  const { _toastMessage } = (location && location.state) || "";
+  const [showToast, setShowToast] = useState(location && location.state);
+  const [toastMessage, setToastMessage] = useState(_toastMessage);
+
+  const closeNotification = () => {
+    setShowToast(false);
+  };
   const CategorySchema = [
     {
       id: "c1",
@@ -24,6 +33,15 @@ const Menu = () => {
     <div>
       <NavbarMenu></NavbarMenu>
       <MenuList categories={CategorySchema} />
+      {showToast && (
+        <div className="notification-toast m-4">
+          <Notification
+            show={showToast}
+            closeNotification={closeNotification}
+            toastMessage={toastMessage}
+          />
+        </div>
+      )}
     </div>
   );
 };

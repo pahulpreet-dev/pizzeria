@@ -7,6 +7,7 @@ import Avatar from "../../shared/UIElements/Avatar";
 
 import "./MenuItem.Component.css";
 import OrderModal from "./OrderModal.component";
+import Notification from "../../shared/Components/notifications.component";
 
 const MenuItem = () => {
   const DUMMY_PIZZAS = [
@@ -57,12 +58,26 @@ const MenuItem = () => {
   //Modal
   const [show, setShow] = useState(false);
   const [modalPizza, setModalPizza] = useState();
+  //state for notification on cart update
+  const [showToast, setShowToast] = useState(false);
+  const [toastMessage, setToastMessage] = useState("");
 
-  const handleClose = () => setShow(false);
+  const handleClose = (cartUpdated) => {
+    setShow(false);
+    if (cartUpdated) {
+      setShowToast(true);
+      setToastMessage("Cart updated");
+    }
+  };
   const handleShow = (pizzaId_) => {
     setShow(true);
     setModalPizza(displayedPizzas.filter((pizza) => pizza.id === pizzaId_));
   };
+
+  const closeNotification = () => {
+    setShowToast(false);
+  };
+
   return (
     <div>
       <NavbarMenu></NavbarMenu>
@@ -102,6 +117,15 @@ const MenuItem = () => {
         handleClose={handleClose}
       />
       <Link to="/viewcart"></Link>
+      {showToast && (
+        <div className="notification-toast m-4">
+          <Notification
+            show={showToast}
+            closeNotification={closeNotification}
+            toastMessage={toastMessage}
+          />
+        </div>
+      )}
     </div>
   );
 };

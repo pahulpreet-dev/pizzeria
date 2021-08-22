@@ -1,17 +1,22 @@
 import { Navbar, Nav, NavDropdown } from "react-bootstrap";
 import { Link } from "react-router-dom";
-import logo from "./PZ.png";
 import { useState } from "react";
 import { connect } from "react-redux";
-import Cart from "../../cart/components/cart.component";
-import { logoutUser } from "../../redux/actions/auth.action";
-import { useEffect } from "react";
 import jwtDecode from "jwt-decode";
+import { useEffect } from "react";
+
+import Cart from "../../cart/components/cart.component";
+import logo from "./PZ.png";
+import { logoutUser } from "../../redux/actions/auth.action";
+import Notification from "./notifications.component";
 
 const NavbarMenu = (props) => {
   const [showCartModal, setShowCartModal] = useState(false);
   const [isAuthentic, setIsAuthentic] = useState(props.auth.isAuthentic);
+
   const [userName, setUsername] = useState("");
+  const [showToast, setShowToast] = useState(false);
+  const [toastMessage, setToastMessage] = useState("");
 
   const handleCloseCart = () => setShowCartModal(false);
   const handleShowCart = (e) => {
@@ -28,6 +33,11 @@ const NavbarMenu = (props) => {
   const logoutButtonHandler = () => {
     setIsAuthentic(false);
     props.logoutUser();
+    setToastMessage("You are now logged out");
+    setShowToast(true);
+  };
+  const closeNotification = () => {
+    setShowToast(false);
   };
   return (
     <>
@@ -93,6 +103,15 @@ const NavbarMenu = (props) => {
         </Navbar.Collapse>
       </Navbar>
       <Cart show={showCartModal} handleCloseCart={handleCloseCart} />
+      {showToast && (
+        <div className="notification-toast m-4">
+          <Notification
+            show={showToast}
+            closeNotification={closeNotification}
+            toastMessage={toastMessage}
+          />
+        </div>
+      )}
     </>
   );
 };

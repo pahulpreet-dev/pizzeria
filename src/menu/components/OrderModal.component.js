@@ -15,6 +15,7 @@ const OrderModal = (props) => {
   const [cartPrice, setCartPrice] = useState(0.0);
   const [pizzaSize, setPizzaSize] = useState();
   const [order, setOrder] = useState({});
+  const [cartUpdated, setCartUpdated] = useState(false);
 
   const handleClose = () => {
     setPrice(0.0);
@@ -24,7 +25,8 @@ const OrderModal = (props) => {
     setShowError(false);
     setCartPrice(0.0);
     setPizzaSize(" ");
-    props.handleClose();
+    props.handleClose(cartUpdated);
+    setCartUpdated(false);
   };
 
   useEffect(() => {
@@ -58,6 +60,7 @@ const OrderModal = (props) => {
       itemQuantity: quantity,
       totalPrice: cartPrice.toFixed(2),
     });
+    setCartUpdated(true);
   };
   if (!props.show) {
     return null;

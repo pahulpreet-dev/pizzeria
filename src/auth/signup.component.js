@@ -6,6 +6,7 @@ import axios from "axios";
 
 import logo from "../shared/Components/PZ.png";
 import "./login.component.css";
+import Notification from "../shared/Components/notifications.component";
 
 const Signup = () => {
   const [loading, setLoading] = useState(false);
@@ -28,10 +29,14 @@ const Signup = () => {
         setToastMessage(result.data.message);
       })
       .catch((error) => {
+        setShowToast(true);
+        setToastMessage("error");
         console.log("error signup", error);
         setLoading(false);
       });
   };
+
+  const closeNotification = () => setShowToast(false);
 
   return (
     <div>
@@ -123,17 +128,11 @@ const Signup = () => {
               </Link>
               {showToast && (
                 <div className="notification-toast m-4">
-                  <Toast
-                    bg="Warning"
-                    className="notification-toast m-4"
-                    onClose={() => setShowToast(false)}
+                  <Notification
+                    closeNotification={closeNotification}
                     show={showToast}
-                    autohide
-                  >
-                    <Toast.Body>
-                      <strong>{toastMessage}</strong>
-                    </Toast.Body>
-                  </Toast>
+                    toastMessage={toastMessage}
+                  />
                 </div>
               )}
             </div>
