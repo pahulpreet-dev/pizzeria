@@ -1,11 +1,14 @@
 import React from "react";
 import { useEffect, useState } from "react";
 import { cartModel } from "../model/cart.model";
+import { useHistory } from "react-router-dom";
 
 import "./cart.component.css";
 import { Modal } from "react-bootstrap";
 
 const Cart = (props) => {
+  const history = useHistory();
+
   const [cartFromLocal, setCartFromLocal] = useState(
     JSON.parse(localStorage.getItem("cart")) || cartModel
   );
@@ -50,6 +53,17 @@ const Cart = (props) => {
   useEffect(() => {
     setCartFromLocal(JSON.parse(localStorage.getItem("cart") || cartModel));
   }, [props.show]);
+
+  const checkoutHandler = () => {
+    const token = localStorage.getItem("jwtToken");
+    if (!token) {
+      const toastMessage = { _toastMessage: "Please login to continue" };
+      history.push({
+        pathname: "/login",
+        state: toastMessage,
+      });
+    }
+  };
 
   return (
     <div className="cart_container">
@@ -96,10 +110,20 @@ const Cart = (props) => {
                     {` $${cartFromLocal.totalPrice[index]}`}
                   </span>
                 </p>
-                <div class="divider div-transparent div-dot"></div>
+                <div className="divider div-transparent div-dot"></div>
               </div>
             ))}
         </Modal.Body>
+        <Modal.Footer>
+          <button
+            className="checkout-btn checkout-btnn"
+            onClick={() => {
+              checkoutHandler();
+            }}
+          >
+            Checkout
+          </button>
+        </Modal.Footer>
       </Modal>
     </div>
   );

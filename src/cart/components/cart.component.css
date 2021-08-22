@@ -120,6 +120,47 @@
 .cart_card:hover .div-dot:after {
   box-shadow: inset 0 0 0 2px white;
 }
+
+.checkout-btn {
+  width: 100%;
+  padding: 10px 25px;
+  font-weight: 500;
+  background: transparent;
+  outline: none !important;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  position: relative;
+  display: inline-block;
+}
+.checkout-btnn {
+  border: 2px solid #ffa500;
+  z-index: 1;
+  color: #fff;
+  background: #ffa500;
+}
+
+.checkout-btnn:after {
+  position: absolute;
+  content: "";
+  width: 100%;
+  height: 0;
+  top: 0;
+  left: 0;
+  z-index: -1;
+  background: #ffffff;
+  transition: all 0.3s ease;
+}
+
+.checkout-btnn:hover {
+  color: #e49400;
+}
+
+.checkout-btnn:hover:after {
+  top: auto;
+  bottom: 0;
+  height: 100%;
+}
+
 /* For Mobile */
 @media screen and (max-width: 600px) {
   .cart_container {
