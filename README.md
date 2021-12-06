@@ -2,6 +2,14 @@
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
+## Install node-modules
+
+In the project directory, use
+
+### `npm install`
+
+This will install all the dependencies required to run the project
+
 ## Available Scripts
 
 In the project directory, you can run:
@@ -13,6 +21,12 @@ Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
 
 The page will reload if you make edits.\
 You will also see any lint errors in the console.
+
+### `npm run server`
+
+Make sure to run it in a different terminal window/tab along with `npm start`
+Runs the development server necessary for operation of the app.
+The server runs at [http://localhost:5000]
 
 ### `npm test`
 
