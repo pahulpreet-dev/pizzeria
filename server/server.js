@@ -1,8 +1,10 @@
+require("dotenv").config();
 const express = require("express");
 const mongoose = require("mongoose");
 
 //import routes
 const users = require("./routes/users.routes");
+const stripeRoutes = require("./routes/stripe.routes");
 
 const app = express();
 app.use(express.urlencoded({ extended: true }));
@@ -28,6 +30,7 @@ app.use((req, res, next) => {
 
 //routes
 app.use("/api/users", users);
+app.use("/api/stripe", stripeRoutes);
 
 app.get("/", (req, res) => {
   res.send("Hello World!");

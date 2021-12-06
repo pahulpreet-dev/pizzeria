@@ -25,7 +25,7 @@ const Login = (props) => {
     if (localStorage.getItem("jwtToken")) {
       history.push({ pathname: "/", state: { _toastMessage: toastMessage } });
     }
-  }, [toastMessage]);
+  }, [toastMessage, history]);
 
   const loginButtonHandler = (e) => {
     e.preventDefault();

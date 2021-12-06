@@ -5,6 +5,7 @@ import { useHistory } from "react-router-dom";
 
 import "./cart.component.css";
 import { Modal } from "react-bootstrap";
+import axios from "axios";
 
 const Cart = (props) => {
   const history = useHistory();
@@ -55,6 +56,7 @@ const Cart = (props) => {
   }, [props.show]);
 
   const checkoutHandler = () => {
+    console.log("heelo key", process.env.REACT_APP_SECRET_KEY);
     const token = localStorage.getItem("jwtToken");
     if (!token) {
       const toastMessage = { _toastMessage: "Please login to continue" };
@@ -62,7 +64,25 @@ const Cart = (props) => {
         pathname: "/login",
         state: toastMessage,
       });
+    } else {
+      wdsStripe();
     }
+  };
+
+  const wdsStripe = () => {
+    const items = {
+      cart: cartFromLocal,
+    };
+    const url = axios
+      .post("http://localhost:5000/api/stripe/checkout", items)
+      .then((res) => {
+        return res.data
+          ? res.data
+          : res.json().then((json) => Promise.reject(json));
+      })
+      .then(({ url }) => {
+        console.log("heelo click me", url);
+      });
   };
 
   return (
@@ -75,7 +95,10 @@ const Cart = (props) => {
       >
         <Modal.Header className="cart-title_modal">
           <Modal.Title>Cart</Modal.Title>
-          <button class="fas fa-times" onClick={props.handleCloseCart}></button>
+          <button
+            className="fas fa-times"
+            onClick={props.handleCloseCart}
+          ></button>
         </Modal.Header>
         <Modal.Body className="modal-body_cart">
           {itemName.length < 1 && (
